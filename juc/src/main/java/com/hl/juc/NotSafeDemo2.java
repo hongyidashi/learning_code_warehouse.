@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * 验证ArrayList的线程不安全以及解决方法
+ */
 public class NotSafeDemo2 {
     public static void main(String[] args) {
         //List集合出现并发错误

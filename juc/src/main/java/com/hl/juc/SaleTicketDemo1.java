@@ -3,6 +3,9 @@ package com.hl.juc;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Lock使用
+ */
 class Ticket{
     private int number = 500;
     Lock lock = new ReentrantLock();
