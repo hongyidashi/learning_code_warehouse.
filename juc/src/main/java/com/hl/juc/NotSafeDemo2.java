@@ -2,6 +2,7 @@ package com.hl.juc;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
