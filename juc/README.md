@@ -71,4 +71,27 @@
    - LinkedTransferQueue： 由链表组成的无界阻塞队列；
    - LinkedBlockingDeque：由链表组成的双向阻塞队列。
 
-  
+#### 12、线程池
+  1. 常见线程池：
+   - FixedThreadPool：执行长期任务性能好，创建一个线程池，一池有N个固定线程，有固定的线程数的线程池；
+   - CachedThreadPool：可扩容线程池；
+  2. 
+  2. 创建线程池的7个参数：  
+  `ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,
+                             long keepAliveTime,
+                             TimeUnit unit,
+                             BlockingQueue<Runnable> workQueue,
+                             ThreadFactory threadFactory,
+                             RejectedExecutionHandler handler)`
+   - corePoolSize：线程池中的常驻核心线程数；
+   - maximumPoolSize：线程池中能容纳同时执行的最大线程数，此值必须大于等于1；
+   - keepAliveTime：多余的空闲线程的存活时间，当线程池中的线程数量超过corePoolSize时，当空闲时间达到keepAliveTime时，
+   多余的线程会被销毁直到只剩下corePoolSize个线程为止；
+   - unit：keepAliveTime的单位；
+   - workQueue： 任务队列，被提交但尚未执行的队列；
+   - threadFactory：表示生成线程池中工作线程的线程工厂，用于创建线程，一般默认的即可；
+   - handler：拒绝策略：表示队列满了，并且工作线 程大于或等于线程池的最大线程数（maximumPoolSize）时
+   如何拒绝请求执行的Runnable的策略。
+
+  3. 线程池工作流程：
+   
