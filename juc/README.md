@@ -75,7 +75,6 @@
   1. 常见线程池：
    - FixedThreadPool：执行长期任务性能好，创建一个线程池，一池有N个固定线程，有固定的线程数的线程池；
    - CachedThreadPool：可扩容线程池；
-  2. 
   2. 创建线程池的7个参数：  
   `ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,
                              long keepAliveTime,
@@ -92,6 +91,20 @@
    - threadFactory：表示生成线程池中工作线程的线程工厂，用于创建线程，一般默认的即可；
    - handler：拒绝策略：表示队列满了，并且工作线 程大于或等于线程池的最大线程数（maximumPoolSize）时
    如何拒绝请求执行的Runnable的策略。
-
   3. 线程池工作流程：
+   1. 在创建线程池后开始等待请求；
+   2. 当调用execute()方法添加一个请求任务时，线程池会做出如下判断：
+    1. 如果正在运行的线程数小于corePoolSize，会立刻运行；
+    2. 如果正在运行的线程数量大于或等于corePoolSize，将会放入队列；
+    3. 如果这个队列满了且运行线程数量小于maximumPoolSize，那么还是要创建非核心线程立即运行这个任务；
+    4. 如果队列满了且运行的线程数大于或等于maximumPoolSize，那么线程池会启动饱和拒绝策略执行。
+   3. 当一个线程完成任务时，将会从队列中取出任务执行；
+   4. 当一个线程无事可做超过一定时间（keepAliveTime），线程池会判断：
+    1. 如果当前运行的线程数大于corePoolSize，这个线程就会被停掉；
+    2. 所以线程池的线程完成所有任务后，它最终会收缩到corePoolSize大小。
+  4. 四种拒绝策略
+   - AbortPolicy：直接抛出异常
+   - CallerRunsPolicy：该策略既不会抛弃任务也不会抛出异常，而是将某些任务回退到调用者
+   - DiscardPolicy：丢弃无法执行的任务，不予任何处理也不抛出异常
+   - DiscardOldestPolicy：丢弃等待时间最长的任务
    
