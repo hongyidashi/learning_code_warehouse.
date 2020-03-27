@@ -7,7 +7,7 @@
   ![JVM体系概览](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/JVM%E4%BD%93%E7%B3%BB%E6%A6%82%E8%A7%88.png)
   
 #### 类装载器ClassLoader
-  负责加在class文件，class文件在文件开头有特定的文件标示，将class文件字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定。
+  负责加在class文件，class文件在文件开头有特定的文件标示，将class文件字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定。  
   ![类装载器ClassLoader](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/ClassLoader.png)
   
   ### 加载器种类
