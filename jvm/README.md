@@ -1,7 +1,8 @@
 # JVM
 
-#### 介绍
-&emsp;&emsp;学习过程中的代码
+## 学习笔记
+  &emsp;&emsp;此笔记为JVM基础入门
+  &emsp;&emsp;主要内容为：JVM基础概念，GC
 
 ## JVM体系概览
   &emsp;&emsp;[JVM体系概览](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/JVM%E4%BD%93%E7%B3%BB%E6%A6%82%E8%A7%88.png)
@@ -37,20 +38,61 @@
   &emsp;&emsp;栈也叫栈内存，主管Java程序的运行，是在现场创建时创建，它的生命周期是跟随线程的生命周期，线程结束栈内存也就释放，对于栈来说不存在垃圾回收问题，只要线程已结束该栈就over，生命周期和线程一致，是线程私有的。  
   &emsp;&emsp;**栈存储的东西：8种基本类型的变量+对象单独引用变量+实例方法。**
 
-  ####栈帧存储的数据：
+  #### 栈帧存储的数据：
    - 本地变量（Local Variables）：输入参数和输出参数以及方法内的变量；
    - 栈操作（Operand Stack）：记录出栈、入栈的操作；
    - 栈帧数据（Frame Data）：包括类文件、方法等。
 
+### Heap堆
+  &emsp;&emsp;一个JVM实例只存在一个堆内存，堆内存的大小是可以调节的。类加载读取了类文件后，需要把类、方法、常变量放到堆内存中，保存所有引用类型的真实信息，以方便执行器执行。
+  &emsp;&emsp;**堆内存逻辑上分为三部分：新生+养老+永久**
+  
+  #### 新生区（简单版）
+  &emsp;&emsp;1. 新生区是类的诞生、成长、消亡的区域，一个类在这里产生、应用，最后被垃圾回收器回收，结束生命；  
+  &emsp;&emsp;2. 新生区又分为两部分：伊甸区（Eden space）和幸存者区（Survivor pace），所有的类都是在伊甸区被new出来的。幸存区有两个：0区和1区；  
+  &emsp;&emsp;3. 3个区的比例为8：1：1。 
+   
+  如果出现OOM异常，说明Java的堆内存不够，原因有二：  
+  &emsp;&emsp;1. Java虚拟机的堆内存设置不够，可通过参数-Xms、-Xmx来调整；  
+  &emsp;&emsp;2. 代码中创建了大量大对象，并长时间不能被垃圾收集器收集（存在被引用）。  
 
-事件| Eden区资源数<br>（占用空间80%） | from区资源数<br>（占用空间10%）  | to区资源数<br>（占用空间10%） 
-:---------:|:---------:|:---------:|:---------:
-达到触发条件|100<br>（设100达到触发条件）|0|0
-第一次触发GC|0<br>（全部清除）|2<br>（将幸存的资源复制到这来）|0
-第一次GC完成|0|2|0
-达到触发条件|100（设100达到触发条件）|2|0
-将Eden区中的幸存资源和from区中的幸存资源复制到to区|100|2|0+2+2
-第二次触发GC|0<br>（全部清除）|2-2<br>（全部清除）|4
-to区和from区互换（逻辑互换）|0|4|0
-第二次GC完成|0|4|0
-
+  #### MinorGC(YGC)过程
+  事件| Eden区资源数<br>（占用空间80%） | from区资源数<br>（占用空间10%）  | to区资源数<br>（占用空间10%） 
+  :---------:|:---------:|:---------:|:---------:
+  达到触发条件|100<br>（设100达到触发条件）|0|0
+  第一次触发GC|0<br>（全部清除）|2<br>（将幸存的资源复制到这来）|0
+  第一次GC完成|0|2|0
+  达到触发条件|100（设100达到触发条件）|2|0
+  将Eden区中的幸存资源和from区<br>中的幸存资源复制到to区|100|2|0+2+2
+  第二次触发GC|0<br>（全部清除）|2-2<br>（全部清除）|4
+  to区和from区互换（逻辑互换）|0|4|0
+  第二次GC完成|0|4|0
+  &emsp;&emsp;解释：  
+  - 每被复制一次，年龄都会+1，如果对象已经达到老年的标准，就会被复制到老年区（默认是15）；
+  - 每次清理，都是Eden和from一起清空的；
+  - YGC（MinorGC）过程：复制，清空，互换。
+  
+### JVM调优（入门）
+  #### JVM参数简介
+  - -Xms：设置初始分配大小，默认为物理内存的1/64；
+  - -Xmx：最大分配内存，默认为物理内存的1/4；
+  - -XX:+PrintGCDetails：输出详细的GC处理日志。
+  &emsp;&emsp;**修改VM参数（IDEA中）：-Xmx1024m -Xms1024m -XX:+PrintGCDetails**  
+  &emsp;&emsp;**生产环境中，-Xms和-Xmx要保持一致，防止内存忽高忽低，造成卡顿等问题。**
+  
+  #### GC参数解读
+  &emsp;&emsp;[GC参数](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/GC参数解读.png) &emsp;&emsp;
+  &emsp;&emsp;[GC参数解读公式](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/GC参数公式.png)
+  
+### GC垃圾回收
+  #### 总体概述
+  &emsp;&emsp;[GC垃圾回收总体概述](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/GC概述.png)  
+  &emsp;&emsp;JVM在进行GC时，并非每次都对上面三个内存区一起回收的，大部分时候回收的都是新生代，因此GC按照回收的区域又分了两种类型，一种是普通GC（minor GC），一种是全局GC（major GC or Full GC）。
+  
+  #### Minor GC和Full GC的区别
+   - 普通GC（minor GC）：只针对新生代区域的GC，指发生在新生代的垃圾收集动作，因为大多数Java对象存活率都不高，所以minor GC非常频繁，一般回收速度也比较快；
+   - 全局GC（major GC or Full GC）：指发生在老年代的垃圾收集动作，出现了major GC，经常会伴随至少一次的minor GC（但并不是绝对的）。major GC的速度一般比minor GC慢上10倍以上；Major GC慢是因为扫描的空间大。
+  
+  #### 四大回收算法
+   1. [引用计数法(了解即可，基本不用)](https://gitee.com/a1031749665/learning_code_warehouse/blob/master/jvm/image/引用计数法.png)
+   2. 复制算法

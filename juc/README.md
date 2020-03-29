@@ -1,6 +1,7 @@
 # JUC
 
 ## 学习笔记
+ &emsp;&emsp;主要内容为：锁，线程，线程池等
 
 #### 1、Lock
   1. Lock是个接口ReentrantLock；
