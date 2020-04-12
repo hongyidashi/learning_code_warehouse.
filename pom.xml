@@ -12,6 +12,7 @@
         <module>juc</module>
         <module>JUF</module>
         <module>jvm</module>
+        <module>面试题</module>
     </modules>
 
     <dependencies>
