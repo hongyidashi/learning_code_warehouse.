@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="boy" class="com.hl.spring.bean.Boy">
+        <property name="name" value="大福"></property>
+        <property name="age" value="19"></property>
+    </bean>
+
+    <bean id="girl" class="com.hl.spring.bean.Girl">
+        <property name="id" value="18"></property>
+        <property name="name" value="断腿少女"></property>
+        <property name="boyfriend" ref="boy"></property>
+    </bean>
+
+</beans>

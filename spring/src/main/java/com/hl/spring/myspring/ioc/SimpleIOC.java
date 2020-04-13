@@ -1,4 +1,4 @@
-package com.hl.interview._02spring;
+package com.hl.spring.myspring.ioc;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,6 +19,10 @@ import java.util.Map;
  * @Description: 简单的IOC容器
  */
 public class SimpleIOC {
+
+    /**
+     * 用于存储bean
+     */
     private Map<String, Object> beanMap = new HashMap<>();
 
     /**
@@ -29,6 +33,11 @@ public class SimpleIOC {
         loadBeans(location);
     }
 
+    /**
+     * 获取容器中的bean
+     * @param name
+     * @return
+     */
     public Object getBean(String name) {
         Object bean = beanMap.get(name);
         if (bean == null) {
@@ -44,7 +53,7 @@ public class SimpleIOC {
      * @throws Exception
      */
     private void loadBeans(String location) throws Exception {
-        // 加载 xml 配置文件
+        // 加载 xml 配置文件，获得所有节点（标签）
         InputStream inputStream = new FileInputStream(location);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
@@ -59,7 +68,6 @@ public class SimpleIOC {
                 Element ele = (Element) node;
                 String id = ele.getAttribute("id");
                 String className = ele.getAttribute("class");
-
                 // 加载 beanClass
                 Class beanClass;
                 try {
@@ -93,11 +101,9 @@ public class SimpleIOC {
                             if (ref == null || ref.length() == 0) {
                                 throw new IllegalArgumentException("ref config error");
                             }
-
                             // 将引用填充到相关字段中
                             declaredField.set(bean, getBean(ref));
                         }
-
                         // 将 bean 注册到 bean 容器中
                         registerBean(id, bean);
                     }
