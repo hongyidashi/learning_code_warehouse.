@@ -11,5 +11,12 @@
 
     <artifactId>面试题</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.2.RELEASE</version>
+        </dependency>
 
+    </dependencies>
 </project>

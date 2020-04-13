@@ -12,6 +12,8 @@ public class ReflectionObject {
 
     private String value;
 
+    Integer integer;
+
     public void publicMethod(String s) {
         System.out.println("this public method --->" + s);
     }
