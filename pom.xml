@@ -14,6 +14,8 @@
         <module>jvm</module>
         <module>interview</module>
         <module>spring</module>
+        <module>basis</module>
+        <module>data-structure</module>
     </modules>
 
     <dependencies>
