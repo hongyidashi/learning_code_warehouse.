@@ -35,9 +35,6 @@ public class SelectSort02 {
             }
 
         }
-
-
         System.out.println(Arrays.toString(arr));
-
     }
 }
