@@ -1,8 +1,5 @@
 package com.hl.tree.binarytree;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * @Auther: panhongtong
  * @Date: 2020/4/26 11:55
@@ -24,12 +21,12 @@ public class BinaryTreeDemo01 {
         heroNode3.setRight(heroNode4);
         heroNode3.setLeft(heroNode5);
 
-        binaryTree.delNode(3);
+//        binaryTree.delNode(3);
 //        System.out.println("前序查找：" + binaryTree.preOrderSearch(5));
 
-        System.out.println("前序遍历");
-        binaryTree.preOrder();
-        System.out.println();
+//        System.out.println("前序遍历");
+//        binaryTree.preOrder();
+//        System.out.println();
 //        System.out.println("中序遍历");
 //        binaryTree.infixOrder();
 //        System.out.println();

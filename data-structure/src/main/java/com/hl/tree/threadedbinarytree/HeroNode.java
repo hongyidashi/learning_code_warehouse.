@@ -12,8 +12,8 @@ public class HeroNode {
     private HeroNode right;
 
     // 指向类型，0表示子树，1表示节点
-    private int leftType;
-    private int rightType;
+    private int leftType = 0;
+    private int rightType = 0;
 
     public HeroNode(int no, String name) {
         this.no = no;

@@ -1,66 +1,106 @@
 package com.hl.tree.threadedbinarytree;
 
-import com.hl.tree.binarytree.HeroNode;
 import lombok.Setter;
 
 @Setter
 public class ThreadedBinaryTree {
     private HeroNode rootNode;
 
-    public void delNode(int no) {
-        if (rootNode == null) {
-            System.out.println("该二叉树为空");
+    /**
+     * 前驱节点指针
+     */
+    private HeroNode preNode;
+
+    /**
+     * 父节点指针
+     */
+    private HeroNode parentNode;
+
+    /**
+     * 中序遍历线索化二叉树
+     */
+    public void threadedBinaryTreeList() {
+        HeroNode curNode = rootNode;
+        while (curNode != null) {
+            // 找到第一个LeftType == 1的节点
+            while (curNode.getLeftType() == 0) {
+                curNode = curNode.getLeft();
+            }
+
+            // 打印这个节点
+            System.out.println(curNode);
+
+            // 如果右指针是指向后继节点，就一直打印
+            while (curNode.getRightType() == 1) {
+                curNode = curNode.getRight();
+                System.out.println(curNode);
+            }
+
+            // 替换这个遍历的节点
+            curNode = curNode.getRight();
+        }
+    }
+
+    /**
+     * 后序线索化节点
+     */
+    public void postThreadedNodes() {
+        postThreadedNodes(rootNode);
+    }
+    private void postThreadedNodes(HeroNode node) {
+        if (node == null) {
             return;
         }
-        if (rootNode.getNo() == no) {
-            rootNode = null;
+
+        // 线索化左子树
+        threadedNodes(node.getLeft());
+        // 线索化右子树
+        threadedNodes(node.getRight());
+
+        // 线索化当前节点
+        // 处理前驱节点
+        if (node.getLeft() == null) {
+            node.setLeft(preNode);
+            node.setLeftType(1);
+        }
+
+        // 处理后继节点
+        if (preNode != null && preNode.getRight() == null) {
+            preNode.setRight(node);
+            preNode.setRightType(1);
+        }
+        preNode = node;
+    }
+
+    /**
+     * 中序线索化二叉树
+     */
+    public void threadedNodes() {
+        threadedNodes(rootNode);
+    }
+    private void threadedNodes(HeroNode node) {
+        if (node == null) {
             return;
         }
-        rootNode.delNode(no);
-    }
 
-    /**
-     * 前序查找
-     */
-    public HeroNode preOrderSearch(int no) {
-        if (rootNode != null) {
-            return rootNode.preOrderSearch(no);
-        } else {
-            System.out.println("该二叉树为空");
-            return null;
-        }
-    }
+        // 线索化左子树
+        threadedNodes(node.getLeft());
 
-    /**
-     * 前序遍历
-     */
-    public void preOrder() {
-        if (rootNode != null) {
-            rootNode.preOrder();
-        } else {
-            System.out.println("该二叉树为空，无法遍历");
+        // 线索化当前节点
+        // 处理前驱节点
+        if (node.getLeft() == null) {
+            node.setLeft(preNode);
+            node.setLeftType(1);
         }
-    }
 
-    /**
-     * 中序遍历
-     */
-    public void infixOrder() {
-        if (rootNode != null) {
-            rootNode.infixOrder();
-        } else {
-            System.out.println("该二叉树为空，无法遍历");
+        // 处理后继节点
+        if (preNode != null && preNode.getRight() == null) {
+            preNode.setRight(node);
+            preNode.setRightType(1);
         }
-    }
+        preNode = node;
 
-    /**
-     * 后序遍历
-     */
-    public void postOrder() {
-        if (rootNode != null) {
-            rootNode.postOrder();
-        } else {
-            System.out.println("该二叉树为空，无法遍历");
-        }
+        // 线索化右子树
+        threadedNodes(node.getRight());
     }
 }
