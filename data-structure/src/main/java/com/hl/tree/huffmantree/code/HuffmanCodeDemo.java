@@ -9,10 +9,15 @@ import java.util.*;
  */
 public class HuffmanCodeDemo {
     public static void main(String[] args) {
-        String content = "GDX,fuck you man fuck shit ok? fuck fuck fuck you";
+        // 原字符串
+        String content = "GDX,fuck you man fuck shit ok? fuck fuck fuck you ao";
 
+        // 编码
         byte[] bytes = huffmanZip(content);
-        decode(bytes);
+
+        // 解码
+        byte[] sourceBytes = decode(bytes);
+        System.out.println(new String(sourceBytes));
     }
 
     /**
@@ -33,10 +38,41 @@ public class HuffmanCodeDemo {
             boolean flag = (i == huffmanBytes.length - 1);
             stringBuilder.append(byteToBitString(b,!flag));
         }
+        System.out.println(stringBuilder);
 
+        // 把字符串按指定赫夫曼编码表进行解码
+        // 把赫夫曼编码表进行调换
+        Map<String, Byte> map = new HashMap<>();
+        HUFFMANCODES.forEach((key,value) -> map.put(value, key));
 
+        // 创建一个存放byte的集合
+        List<Byte> list = new ArrayList<>();
+        for (int i = 0; i < stringBuilder.length();) {
+            int count = 1;
+            boolean flag = true;
+            Byte b = null;
 
-        return null;
+            while (flag) {
+                // 取出key
+                String key = stringBuilder.substring(i, i + count);
+                b = map.get(key);
+                if (b == null) {
+                    //说明没找到
+                    count++;
+                } else {
+                    flag = false;
+                }
+            }
+            list.add(b);
+            i += count;
+        }
+
+        // 将list中的字节放入byte[]中返回
+        byte[] bytes = new byte[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            bytes[i] = list.get(i);
+        }
+        return bytes;
     }
 
     /***
@@ -58,7 +94,6 @@ public class HuffmanCodeDemo {
         }
     }
     //--------------------------------解码--------------------------------
-
 
     //--------------------------------编码--------------------------------
     /**
@@ -86,6 +121,7 @@ public class HuffmanCodeDemo {
         for (byte b : bytes) {
             stringBuilder.append(HUFFMANCODES.get(b));
         }
+        System.out.println(stringBuilder);
 
         // 统计byte[] huffmanCodeBytes的长度
         int len = (stringBuilder.length() + 7) / 8;
