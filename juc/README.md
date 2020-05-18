@@ -8,6 +8,11 @@
   2. ReentrantLock是可重用、非公平、递归锁;
   3. 使用非常简单，只需定义好锁 `Lock lock = new ReentrantLock();`，然后在需要的地方加上`lock.lock();`，
   并在使用后`lock.unlock();`（建议放在finally中，防止发生异常无法释放锁）即可;
+  4. synchronized和lock的区别
+     1. 首先synchronized是java内置关键字，在jvm层面，Lock是个java类;
+     2. synchronized无法判断是否获取锁的状态，Lock可以判断是否获取到锁;
+     3. synchronized会自动释放锁(a线程执行完同步代码会释放锁；b线程执行过程中发生异常会释放锁)，Lock需在finally中手工释放锁（unlock()方法释放锁），否则容易造成线程死锁;
+     4. Lock锁适合大量同步的代码的同步问题，synchronized锁适合代码少量的同步问题。
 
 #### 2、ArrayList的线程安全问题
   1. ArrayList是线程不安全的；
@@ -93,14 +98,14 @@
    - handler：拒绝策略：表示队列满了，并且工作线 程大于或等于线程池的最大线程数（maximumPoolSize）时
    如何拒绝请求执行的Runnable的策略。
   3. 线程池工作流程：
-   1. 在创建线程池后开始等待请求；
-   2. 当调用execute()方法添加一个请求任务时，线程池会做出如下判断：
-    1. 如果正在运行的线程数小于corePoolSize，会立刻运行；
-    2. 如果正在运行的线程数量大于或等于corePoolSize，将会放入队列；
-    3. 如果这个队列满了且运行线程数量小于maximumPoolSize，那么还是要创建非核心线程立即运行这个任务；
-    4. 如果队列满了且运行的线程数大于或等于maximumPoolSize，那么线程池会启动饱和拒绝策略执行。
-   3. 当一个线程完成任务时，将会从队列中取出任务执行；
-   4. 当一个线程无事可做超过一定时间（keepAliveTime），线程池会判断：
+   - 在创建线程池后开始等待请求；
+   - 当调用execute()方法添加一个请求任务时，线程池会做出如下判断：
+     1. 如果正在运行的线程数小于corePoolSize，会立刻运行；
+     2. 如果正在运行的线程数量大于或等于corePoolSize，将会放入队列；
+     3. 如果这个队列满了且运行线程数量小于maximumPoolSize，那么还是要创建非核心线程立即运行这个任务；
+     4. 如果队列满了且运行的线程数大于或等于maximumPoolSize，那么线程池会启动饱和拒绝策略执行。
+   - 当一个线程完成任务时，将会从队列中取出任务执行；
+   - 当一个线程无事可做超过一定时间（keepAliveTime），线程池会判断：
     1. 如果当前运行的线程数大于corePoolSize，这个线程就会被停掉；
     2. 所以线程池的线程完成所有任务后，它最终会收缩到corePoolSize大小。
   4. 四种拒绝策略
@@ -108,6 +113,19 @@
    - CallerRunsPolicy：该策略既不会抛弃任务也不会抛出异常，而是将某些任务回退到调用者
    - DiscardPolicy：丢弃无法执行的任务，不予任何处理也不抛出异常
    - DiscardOldestPolicy：丢弃等待时间最长的任务
+  5. 为什么不直接new一个线程而要用线程池，用线程池有什么好处
+     1. 每次new Thread新建对象性能差；
+     2. 线程缺乏统一管理，可能无限制新建线程，相互之间竞争，及可能占用过多系统资源导致死机或oom；
+     3. 缺乏更多功能，如定时执行、定期执行、线程中断；
+     4. 好处：
+     - 重用存在的线程，减少对象创建、消亡的开销，性能佳；
+     - 可有效控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞；
+     - 提供定时执行、定期执行、单线程、并发数控制等功能。
+  6. 线程池有几种默认实现
+     1. newSingleThreadExecutor：单线程的线程池
+     2. newFixedThreadPool：创建固定大小的线程池
+     3. newCachedThreadPool：可缓存的线程池
+     4. newScheduledThreadPool：大小无限的线程池
    
 #### 13、CAS
   1. CAS是什么  
