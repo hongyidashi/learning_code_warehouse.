@@ -16,4 +16,9 @@ public interface TestInterfaceDefault {
     static String VARIABLE = "静态变量";
 
     //protected String proMethod();￿￿
+
+    // 支持静态方法
+    static String staticMethod(){
+        return "可以？";
+    }
 }

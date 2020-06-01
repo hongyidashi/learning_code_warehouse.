@@ -1,4 +1,4 @@
-package com.hl.interview._01basis._01override;
+package com.hl.interview._01basis._01override_overload;
 
 import lombok.Data;
 
@@ -15,6 +15,14 @@ public class Persion {
 
     public Persion testOverride() {
         return new Persion();
+    }
+
+    public static void testStaticMethod() {
+        System.out.println("fuck");
+    }
+
+    private void testPrivateMethod() {
+        System.out.println("私有方法");
     }
 
 }

@@ -16,6 +16,7 @@
         <module>spring</module>
         <module>basis</module>
         <module>data-structure</module>
+        <module>mysql</module>
     </modules>
 
     <dependencies>
