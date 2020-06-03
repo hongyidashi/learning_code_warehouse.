@@ -17,9 +17,9 @@
 #### 2、ArrayList的线程安全问题
   1. ArrayList是线程不安全的；
   2. 解决方法一般有3种：
-    - 使用Collections工具类将集合变为线程安全
-    - 使用线程安全的集合Vector，实现是在操作方法上加了synchronized关键字
-    - 使用JUC下的线程安全集合：CopyOnWriteArrayList
+   - 使用Collections工具类将集合变为线程安全
+   - 使用线程安全的集合Vector，实现是在操作方法上加了synchronized关键字
+   - 使用JUC下的线程安全集合：CopyOnWriteArrayList
   3. 以上解决思路也适用于Map和Set
 
 #### 3、synchronized锁的作用范围
@@ -48,11 +48,14 @@
 
 #### 7、CountDownLatch
   1. CountDownLatch相当于一个倒计时的计数器，只有在计数值为0的时候才会执行之后的代码。
-  2.创建：`CountDownLatch countDownLatch = new CountDownLatch(int count);`
+  2. 创建：`CountDownLatch countDownLatch = new CountDownLatch(int count);`
   3. 计数-1：`countDownLatch.countDown();`
+  4. 作用：实现多个线程开始执行任务的最大并行性。注意是并行性，不是并发，强调的是多个线程在某一时刻同时开始执行。
+  5. 缺点：CountDownLatch是一次性的，计数器的值只能在构造方法中初始化一次，之后没有任何机制再次对其设置值，当CountDownLatch使用完毕后，它不能再次被使用。
 
 #### 8、CyclicBarrier
-  1. 相当于加法计数器，当计数达到预定值时，就会执行barrierAction。
+  1. 相当于加法计数器，当计数达到预定值时，就会执行barrierAction。它要做的事情是，
+  让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续干活。
   2. 创建`CyclicBarrier cyclicBarrier = new CyclicBarrier(int parties, Runnable barrierAction);`
   3. 计数+1：`countDownLatch.countDown();`
 
@@ -113,15 +116,7 @@
    - CallerRunsPolicy：该策略既不会抛弃任务也不会抛出异常，而是将某些任务回退到调用者
    - DiscardPolicy：丢弃无法执行的任务，不予任何处理也不抛出异常
    - DiscardOldestPolicy：丢弃等待时间最长的任务
-  5. 为什么不直接new一个线程而要用线程池，用线程池有什么好处
-     1. 每次new Thread新建对象性能差；
-     2. 线程缺乏统一管理，可能无限制新建线程，相互之间竞争，及可能占用过多系统资源导致死机或oom；
-     3. 缺乏更多功能，如定时执行、定期执行、线程中断；
-     4. 好处：
-     - 重用存在的线程，减少对象创建、消亡的开销，性能佳；
-     - 可有效控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞；
-     - 提供定时执行、定期执行、单线程、并发数控制等功能。
-  6. 线程池有几种默认实现
+  5. 线程池有几种默认实现
      1. newSingleThreadExecutor：单线程的线程池
      2. newFixedThreadPool：创建固定大小的线程池
      3. newCachedThreadPool：可缓存的线程池
