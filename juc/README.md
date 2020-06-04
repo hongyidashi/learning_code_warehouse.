@@ -21,6 +21,10 @@
    - 使用线程安全的集合Vector，实现是在操作方法上加了synchronized关键字
    - 使用JUC下的线程安全集合：CopyOnWriteArrayList
   3. 以上解决思路也适用于Map和Set
+  4. CopyOnWriteArrayList
+  - 读读共享、写写互斥、读写互斥、写读互斥，写入也不会阻塞读取操作。只有写入和写入之间需要进行同步等待。
+  - 写入不阻塞：当 List 需要被修改的时候，我并不修改原有内容，而是对原有数据进行一次复制，将修改的内容写入副本。
+  写完之后，再将修改完的副本替换原来的数据，这样就可以保证写操作不会影响读操作了。
 
 #### 3、synchronized锁的作用范围
   1. 加在普通方法：普通方法锁的是该实例对象，同一个对象，一旦有线程进入了该类中带有synchronized的方法，
@@ -72,9 +76,10 @@
    
 #### 11、BlockingQueue
   常见阻塞队列：
-   - ArrayBlockingQueue：由数组结构组成的有界阻塞队列；
-   - LinkedBlockingQueue：链表结构组成的有界（但默认大小值为`Integer.MAX_VALUE`）阻塞队列；
-   - PriorityBlockingQueue：支持优先级排序的无界阻塞队列；
+   - ArrayBlockingQueue：由数组结构组成的有界阻塞队列；默认情况下不能保证线程访问队列的公平性，如果保证公平性，通常会降低吞吐量。
+   - LinkedBlockingQueue：单向链表结构组成的有界（但默认大小值为`Integer.MAX_VALUE`）阻塞队列；
+   - PriorityBlockingQueue：支持优先级排序的无界（只能指定初始的队列大小，后面插入元素的时候，如果空间不够的话会自动扩容）阻塞队列；
+   默认情况下元素采用自然顺序进行排序，也可以通过自定义类实现 compareTo() 方法来指定元素排序规则，或者初始化时通过构造器参数 Comparator 来指定排序规则。
    - DelayQueue：使用优先级队列实现的延迟无界阻塞队列；
    - SynchronousQueue：不存储元素的阻塞队列，也即单个元素的队列；
    - LinkedTransferQueue： 由链表组成的无界阻塞队列；
@@ -136,3 +141,4 @@
 #### 14、自旋锁
   1. 自旋锁是指尝试获取锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁；
   2. 优点是减少线程上下文切换的消耗，缺点是循环会消耗CPU。
+  
