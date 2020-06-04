@@ -1,4 +1,4 @@
-package com.hl.interview._03thread._01threadpool;
+package com.hl.interview._03concurrent._01threadpool;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
