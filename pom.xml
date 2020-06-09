@@ -17,6 +17,7 @@
         <module>basis</module>
         <module>data-structure</module>
         <module>mysql</module>
+        <module>algorithm</module>
     </modules>
 
     <dependencies>
