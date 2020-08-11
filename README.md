@@ -8,3 +8,6 @@
   - [JUF](https://github.com/hongyidashi/learning_code_warehouse./blob/master/juf/README.md)
   - [JVM](https://github.com/hongyidashi/learning_code_warehouse./blob/master/jvm/README.md)
   - [MySQL](https://github.com/hongyidashi/learning_code_warehouse./blob/master/mysql/README.md)
+
+## 新开模块
+[AQS-ReentrantLock](juc/AQS-ReentrantLock.md)  
