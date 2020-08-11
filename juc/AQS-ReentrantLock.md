@@ -15,7 +15,7 @@
 要解决上面的问题，就必须具备不会阻塞的功能，下面的三个方案都是解决这个问题的好办法（看下面表格描述你就明白三个方案的含义了）
 
 |特性|描述|API|
-|:---|:---:|---:|
+|:---:|:---:|:---:|
 |能响应中断|如果不能自己释放，那可以响应中断也是很好的。Java多线程中断机制 专门描述了中断过程，目的是通过中断信号来跳出某种状态，比如阻塞|lockInterruptbly()|
 |非阻塞式的获取锁|尝试获取，获取不到不会阻塞，直接返回|tryLock()|
 |支持超时|给定一个时间限制，如果一段时间内没获取到，不是进入阻塞状态，同样直接返回|tryLock(long time, timeUnit)|
@@ -92,7 +92,7 @@ ReentrantLock，ReentrantReadWriteLock，Semaphore(信号量)，CountDownLatch�
 
 
 | 方法名称     | 方法描述    |
-| --------| -----: |
+| :--------:| :-----: |
 |protected boolean tryAcquire(int arg)|「独占式」获取同步状态|
 |protected boolean tryRelease(int arg)|「独占式」释放同步状态|
 |protected int tryAcquireShared(int arg)|「共享式」获取公布状态  返回值>0表示成功，反之失败|
@@ -107,7 +107,7 @@ ReentrantLock，ReentrantReadWriteLock，Semaphore(信号量)，CountDownLatch�
 还要通过同步器提供的下面三个方法（AQS 提供的）来获取或修改同步状态：
 
 | 方法名称     | 方法描述    |
-| --------| -----: |
+| :--------:| :-----: |
 |getState()|获取当前同步状态|
 |setState()|设置同步状态|
 |compareAndSetState(int expect, int update)|使用CAS设置同步状态，该方法会保证同步状态设置的原子性|
