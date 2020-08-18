@@ -2,6 +2,8 @@ package com.hl.tree.binarytree;
 
 import lombok.Setter;
 
+import java.util.Stack;
+
 @Setter
 public class BinaryTree {
     private HeroNode rootNode;
@@ -28,6 +30,30 @@ public class BinaryTree {
             System.out.println("该二叉树为空");
             return null;
         }
+    }
+
+    /**
+     * 利用栈进行前序遍历
+     */
+    public void preOrderByStack() {
+        Stack<HeroNode> stack = new Stack<>();
+        HeroNode heroNode = rootNode;
+
+        while (heroNode != null || !stack.isEmpty()) {
+            // 迭代访问节点的左孩子，并入栈
+            while (heroNode != null) {
+                System.out.println(heroNode);
+                stack.push(heroNode);
+                heroNode = heroNode.getLeft();
+            }
+
+            // 如果节点没有左孩子，则弹出栈顶节点，访问节点又孩子
+            if (!stack.isEmpty()) {
+                heroNode = stack.pop();
+                heroNode = heroNode.getRight();
+            }
+        }
+
     }
 
     /**

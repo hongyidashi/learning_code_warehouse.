@@ -24,9 +24,12 @@ public class BinaryTreeDemo01 {
 //        binaryTree.delNode(3);
 //        System.out.println("前序查找：" + binaryTree.preOrderSearch(5));
 
-//        System.out.println("前序遍历");
-//        binaryTree.preOrder();
-//        System.out.println();
+        System.out.println("前序遍历");
+        binaryTree.preOrder();
+        System.out.println();
+        System.out.println("栈-前序遍历");
+        binaryTree.preOrderByStack();
+
 //        System.out.println("中序遍历");
 //        binaryTree.infixOrder();
 //        System.out.println();
