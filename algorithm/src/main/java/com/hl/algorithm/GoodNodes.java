@@ -1,5 +1,6 @@
 package com.hl.algorithm;
 
+
 /**
  * 描述:
  * 给你一棵根为 root 的二叉树，请你返回二叉树中好节点的数目。
@@ -24,7 +25,7 @@ public class GoodNodes {
         return count;
     }
 
-    public void recur(TreeNode node,int max) {
+    public void recur(TreeNode node, int max) {
         if (node == null) {
             return;
         }
@@ -37,18 +38,5 @@ public class GoodNodes {
         recur(node.left, max);
         recur(node.right, max);
 
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-    TreeNode() {}
-    TreeNode(int val) { this.val = val; }
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
     }
 }
