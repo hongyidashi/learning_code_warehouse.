@@ -13,7 +13,7 @@ public class Demo678 {
         System.out.println(checkValidString("(())((())()()(*)(*()(())())())()()((()())((()))(*"));
     }
 
-    public static boolean checkValidString1(String s) {
+    public static boolean checkValidString(String s) {
         Stack<Integer> left = new Stack<>();
         Stack<Integer> star = new Stack<>();
 
