@@ -1,6 +1,6 @@
 # Docker
 
-## 基础部分
+## 目录
 + [常用命令](#常用命令)
 + [Docker镜像](#Docker镜像)
 + [容器数据卷](#容器数据卷)
@@ -209,3 +209,41 @@ docker exec -it tomcat-docker0 ping tomcat-net-01
 systemctl daemon-reload
 systemctl restart docker.service
 ```
+
+## <span id="安装Docker">安装Docker</span>
+1. 安装
+```shell script
+1、卸载旧的版本
+sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+# 2、需要的安装包    
+sudo yum install -y yum-utils
+
+# 3、设置镜像的仓库
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo # 默认是从国外的！
+    
+    
+sudo yum-config-manager \
+    --add-repo \
+    http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo  # 使用阿里云的，十分快
+   
+# 更新yum软件包索引
+yum makecache fast
+
+# 4、安装docker引擎 docker-ce 社区版    ee企业版
+sudo yum install docker-ce docker-ce-cli containerd.io
+
+# 5、启动docker
+sudo systemctl start docker
+
+```
+
+2. 阿里云镜像加速，自己去阿里云上找
