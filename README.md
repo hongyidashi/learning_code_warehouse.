@@ -4,11 +4,21 @@
   &emsp;&emsp;学习过程中的代码
 
 ## 目前已有模块
-  - [JUC](https://github.com/hongyidashi/learning_code_warehouse./blob/master/juc/README.md)
-  - [JUF](https://github.com/hongyidashi/learning_code_warehouse./blob/master/juf/README.md)
-  - [JVM](https://github.com/hongyidashi/learning_code_warehouse./blob/master/jvm/README.md)
-  - [MySQL](https://github.com/hongyidashi/learning_code_warehouse./blob/master/mysql/README.md)
+  - [JUC](/juc/README.md)
+  - [JUF](/juf/README.md)
+  - [JVM](/jvm/README.md)
+  - [MySQL](/mysql/README.md)
+  - [AQS-ReentrantLock](juc/AQS-ReentrantLock.md)  
+  - [Docker](study-notes/docker.md)  
+  - Kubernetes基本概念
+    + [Master和Node](study-notes/kubernetes/Master和Node.md)
+    + [Pod](study-notes/kubernetes/Pod.md)
+    + [Label](study-notes/kubernetes/Label.md)
+    + [Replication Controller](study-notes/kubernetes/Replication%20Controller.md)
+    + [Deployment](study-notes/kubernetes/Deployment.md)
+    + [自动扩容-HPA](study-notes/kubernetes/HPA.md)
+    + [StatefulSet](study-notes/kubernetes/StatefulSet.md)
+    + [Service](study-notes/kubernetes/Service.md)
+    + [Volume](study-notes/kubernetes/Volume.md)
+    + [PersistentVolumes](study-notes/kubernetes/PersistentVolumes.md)
 
-## 新开模块
-[AQS-ReentrantLock](juc/AQS-ReentrantLock.md)  
-[Docker](study-notes/docker.md)  
