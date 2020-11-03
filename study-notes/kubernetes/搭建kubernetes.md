@@ -173,15 +173,14 @@ etcd-0               Healthy     {"health":"true"}
 # 好了，瞎子都看得出来创建失败，再见(划掉)
 # master初始化完成后，以下两个组件状态显示依然为Unhealthy
 # 这时我们可以执行  ls /etc/kubernetes/manifests/ 看看，发现下面有3给yaml文件，这3给yaml文件就是定义这三个组件用的，我们来对他动点手脚
-# 我们分别进入 kube-controller-manager.yaml 和 kube-scheduler.yaml ，然后
+# 我们分别打开 kube-controller-manager.yaml 和 kube-scheduler.yaml ，然后
     - --port=0   ########### 删除或者注释这行 #################
 # --port=0：关闭监听 http /metrics 的请求
 
-
 # 重启kubelet服务，虽然你不重启也行
-systemctl restart kubelet服务
+systemctl restart kubelet
 
-# 就会看到  ohhhhhhhhhhhhhhhhhhhhhh
+# 就会看到  ohhhhhhhhhhhhhhhhhhhhhh!!!!!!!!!!!!!  你成功了                        三分之一
 Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS    MESSAGE             ERROR
 controller-manager   Healthy   ok                  
@@ -203,7 +202,7 @@ kubectl apply -f kube-flannel.yml
 # 查询Pod状态
 kubectl get pod --all-namespaces -o wide
 
-# 舒服
+# 哦~舒服
 NAMESPACE     NAME                              READY   STATUS    RESTARTS   AGE    IP               NODE      NOMINATED NODE   READINESS GATES
 kube-system   coredns-f9fd979d6-27dfz           1/1     Running   0          17m    10.244.0.2       k8s-m-n   <none>           <none>
 kube-system   coredns-f9fd979d6-jz4dq           1/1     Running   0          17m    10.244.0.3       k8s-m-n   <none>           <none>
@@ -243,7 +242,7 @@ metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
 spec:
-  type: NodePort ## 还有这个
+  type: NodePort ## 加上这个，对外暴露
   ports:
     - port: 443
       targetPort: 8443
@@ -310,7 +309,7 @@ Data
 ====
 ca.crt:     1066 bytes
 namespace:  11 bytes
-token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlJZNWJ6R3VCTFdNM0I5OU82QkNNZ3NYOWZuUmN4cDQyWDNSeGlkeGVqazgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbi10b2tlbi02cHNkNyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjI0NzBmOWE2LWJkNDctNDZiZC04MWNhLTJhYjhmNGNlNjAzYyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTprdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiJ9.RlcSI6FBc2QdJkrijpnzM_t2AP642Udamcoz6YFHWV9K08RrX084RIoS9zo3iBL8E7KMm-6mCVYG2YEO57YFd3BjiWugSxlJ5v7Qq9ZWMMqOscm9Y-XgpbmNQdrb1bEwXAEbFw1HGA8ndFfs9r82O5Q4iuo955XzfrvfWzXxOa6KouNRhLZ5csZiyv27qclXY79qvQxUbHCDB4zizbANSm4lcN_ZAduz_q08bMqLZ_pggafKnO4P67cWAKxBFjCiBsWRvR3788mWdwUBlNyN7VNQhT6Yh3NZQ9aUiFDORKn6BxUn5L-6eoh1XZ0WwCIJmqTg8bDG3s5p6uEefgovNQ
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlJZNWJ6R3VCTFdNM0I5OU82QkNNZ3NYO...
 
 # 我们取用最后一个token，你的屏幕上可能会有一些空格，那些是不要的，这个token记得保存下来，是永久有效的，可看截图
 ```
@@ -321,10 +320,14 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlJZNWJ6R3VCTFdNM0I5OU82QkNNZ3NYOWZuUmN4
 
 #### 访问Dashboard 
 
-打开浏览器输入 https://你的IP:31002，然后
+打开浏览器输入 https://你的IP:31002
+
+然后(注意是`htpps`啊)
 
 ![Dashboard登录](/study-notes/images/Dashboard登陆.png)
 
-里面是英文界面，我记得老一点的版本是有中文界面的，好像是v1.10.1就可以，有空可以试一下
+就可以看到Dashboard了。界面是英文的，我记得老一点的版本是有中文界面的，好像是v1.10.1就可以，有空可以试一下，不过好像已经不支持1.19了，啊嘎嘎嘎嘎嗝
 
 ![Dashboard界面](/study-notes/images/Dashboard界面.png)
+
+## 至此，收工
