@@ -21,4 +21,5 @@
     + [Service](study-notes/kubernetes/Service.md)
     + [Volume](study-notes/kubernetes/Volume.md)
     + [PersistentVolumes](study-notes/kubernetes/PersistentVolumes.md)
-
+  
+  - [搭建kubernetes](study-notes/kubernetes/搭建kubernetes.md)
