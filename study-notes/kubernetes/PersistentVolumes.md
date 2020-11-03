@@ -61,3 +61,88 @@ spec:
 ```
 如上，在 `volumes` 部分的指定路径，应该被替换为PV卷需要再利用的路径。
 
+## PV介绍
+每个PV都包含一个spec和状态，即说明书和PV卷的状态。
+```yaml
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: pv0003
+  spec:
+    capacity:
+      storage: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Recycle
+    storageClassName: slow
+    nfs:
+      path: /tmp
+      server: 172.17.0.2
+```
+
+## 访问模式
+每个PV有它自己的访问模式  
+
+访问模式包括：
+- ReadWriteOnce -- 该volume只能被单个节点以读写的方式映射
+- ReadOnlyMany -- 该volume可以被多个节点以只读方式映射
+- ReadWriteMany -- 该volume只能被多个节点以读写的方式映射
+
+在CLI中，访问模式可以简写为：
+- RWO - ReadWriteOnce
+- ROX - ReadOnlyMany
+- RWX - ReadWriteMany
+
+## 回收策略
+当前的回收策略有：
+- Retain：手动回收
+- Recycle：需要擦出后才能再使用
+- Delete：相关联的存储资产，如AWS EBS，GCE PD，Azure Disk，or OpenStack Cinder卷都会被删除
+
+当前，只有NFS和HostPath支持回收利用，AWS EBS，GCE PD，Azure Disk，or OpenStack Cinder卷支持删除操作
+
+## 映射选项
+当PV被映射到一个node上时，Kubernetes管理员可以指定额外的映射选项。可以通过使用标注volume.beta.kubernetes.io/mount-options来指定PV的映射选项  
+举个栗子：
+```yaml
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: gce-disk-1
+  annotations:
+    volume.beta.kubernetes.io/mount-options: "discard"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteOnce"
+  gcePersistentDisk:
+    fsType: "ext4"
+    pdName: "gce-disk-1
+```
+映射选项是当映射PV到磁盘时，一个可以被递增地添加和使用的字符串。注意，**并非所有的PV类型都支持映射选项**。
+
+## 选择器（Selector）
+PVC可以指定标签选择器进行更深度的过滤PV，只有匹配了选择器标签的PV才能绑定给PVC。选择器包含两个字段：
+- matchLabels（匹配标签）：PV必须有一个包含该值得标签
+- matchExpressions（匹配表达式）：一个请求列表，包含指定的键、值的列表、关联键和值的操作符。合法的操作符包含In，NotIn，Exists，和DoesNotExist
+
+## 使用PVC
+Pod通过使用PVC（使用方式和volume一样）来访问存储。PVC必须和使用它的pod在同一个命名空间，集群发现pod命名空间的PVC，根据PVC得到其后端的PV，然后PV被映射到host中，再提供给pod
+```yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: dockerfile/nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+```
