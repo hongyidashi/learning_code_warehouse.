@@ -1,12 +1,10 @@
 # 搭建kubernetes
 
-
-
 ## 硬件配置
 
-0.  科学上网 ~~你不能科学上网你玩给🔨~~
+0.  科学上网 ~~你不能科学上网你玩个🔨~~
 
-1.  CPU核数>=2，官方推荐~~，你要是非得0给核👴也不知道会发生啥~~
+1.  CPU核数>=2，官方推荐~~，你要是非得0给核爷也不知道会发生啥~~
 
 2.  可用内存>3G（我说的），可用存储>40G（还是我说的）
 
@@ -28,7 +26,7 @@
 
 ### 1. 系统配置
 
-```shell
+```shell script
 # 关闭防火墙
 systemctl stop firewalld
 systemctl disable firewalld
@@ -44,15 +42,37 @@ SELINUX=disabled
 swapoff -a
 ```
 
-
-
 ### 2. 准备docker
 
+#### 安装docker
 
+```shell script
+# 安装依赖
+yum install -y yum-utils
+
+# 配置镜像仓库
+vi  /etc/yum.repos.d/repo.repo
+# 添加下面内容
+[repo]
+name=repo
+baseurl = https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/7/x86_64/stable/
+enabled=1
+gpgcheck=0
+
+# 安装
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# 更新源
+yum makecache fast
+
+# 安装docker
+yum install docker-ce
+```
 
 #### 配置docker
 
-```shell
+```shell script
 # 开启iptables filter表的FORWARD链 
 # 编辑/lib/systemd/system/docker.service，在ExecStart=..上面加入如下内容：
 vi /lib/systemd/system/docker.service
@@ -73,15 +93,13 @@ vi /etc/docker/daemon.json
 systemctl daemon-reload && systemctl restart docker && systemctl status docker
 ```
 
-
-
 ### 3. 安装kubernetes
 
 #### 安装kubeadm、kubectl、kubelet
 
 配置
 
-```shell
+```shell script
 # 配置软件源
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -94,6 +112,9 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 EOF
 
 # 解决路由异常
+# 先执行
+modprobe br_netfilter
+# 再执行
 cat <<EOF > /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -112,7 +133,7 @@ sysctl -p /etc/sysctl.d/k8s.conf
 
 安装
 
-```shell
+```shell script
 # 查看可用版本
 yum list --showduplicates | grep 'kubeadm\|kubectl\|kubelet'
 
@@ -128,7 +149,7 @@ systemctl start kubelet
 
 #### 使用kubeadm init初始化集群
 
-```shell
+```shell script
 # 初始化master节点
 # kubeadm init --kubernetes-version=写你下载的版本 --pod-network-cidr=10.244.0.0/16
 kubeadm init --kubernetes-version=v1.19.3 --pod-network-cidr=10.244.0.0/16
@@ -172,7 +193,7 @@ etcd-0               Healthy   {"health":"true"}
 
 #### 安装Pod Network
 
-```shell
+```shell script
 # 安装Flannel
 # 你想办法把 https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml 这个东西搞到手。。
 # 复制这url在浏览器打开就有了
@@ -198,7 +219,7 @@ kube-system   kube-scheduler-k8s-m-n            1/1     Running   0          10m
 
 #### Master节点参与工作负载
 
-```shell
+```shell script
 # 使用kubeadm初始化的集群，出于安全考虑Pod不会被调度到Master Node上，可使用如下命令使Master节点参与工作负载
 # kubectl taint nodes node的NAME node-role.kubernetes.io/master-
 kubectl taint nodes k8s-m-n node-role.kubernetes.io/master-
@@ -211,7 +232,7 @@ kubectl get nodes
 
 #### 部署Dashboard插件
 
-```shell
+```shell script
 # 同样想办法得到Dashboard插件配置文件，我这里拿的是目前最新的，你可以去https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dashboard 获取
 # 编辑kubernetes-dashboard.yaml文件
 kind: Service
@@ -238,7 +259,7 @@ kubectl create -f kubernetes-dashboard.yaml
 
 #### 授予Dashboard账户集群管理权限
 
-```shell
+```shell script
 # 创建一个kubernetes-dashboard-admin的ServiceAccount并授予集群admin的权限，创建kubernetes-dashboard-admin.rbac.yaml
 vi kubernetes-dashboard-admin.rbac.yaml
 # 添加如下内容
