@@ -104,32 +104,27 @@ systemctl daemon-reload && systemctl restart docker && systemctl status docker
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
 enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 
-# 解决路由异常
+# 解决路由异常和调整swappiness参数
 # 先执行
 modprobe br_netfilter
 # 再执行
 cat <<EOF > /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
-EOF
-sysctl --system
-
-# 调整swappiness参数 
-# 修改/etc/sysctl.d/k8s.conf添加一行：
-vi /etc/sysctl.d/k8s.conf
 vm.swappiness=0
+EOF
+
 # 使修改生效
-sysctl -p /etc/sysctl.d/k8s.conf
+sysctl --system
 ```
-
-
 
 安装
 
@@ -139,12 +134,10 @@ yum list --showduplicates | grep 'kubeadm\|kubectl\|kubelet'
 
 # 安装指定版本(后面那个 -y 是我图省事，你可以不加)
 yum install kubeadm-1.19.3 kubectl-1.19.3 kubelet-1.19.3 -y
+# 等吧
 systemctl enable kubelet
 systemctl start kubelet
 ```
-
-等吧
-
 
 
 #### 使用kubeadm init初始化集群
@@ -172,7 +165,9 @@ etcd-0               Healthy     {"health":"true"}
 
 # 好了，瞎子都看得出来创建失败，再见(划掉)
 # master初始化完成后，以下两个组件状态显示依然为Unhealthy
-# 这时我们可以执行  ls /etc/kubernetes/manifests/ 看看，发现下面有3给yaml文件，这3给yaml文件就是定义这三个组件用的，我们来对他动点手脚
+# 这时我们可以执行  
+# ls /etc/kubernetes/manifests/
+# 看看，发现下面有3给yaml文件，这3给yaml文件就是定义这三个组件用的，我们来对他动点手脚
 # 我们分别打开 kube-controller-manager.yaml 和 kube-scheduler.yaml ，然后
     - --port=0   ########### 删除或者注释这行 #################
 # --port=0：关闭监听 http /metrics 的请求
