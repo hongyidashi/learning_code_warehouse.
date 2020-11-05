@@ -309,6 +309,9 @@ ca.crt:     1066 bytes
 namespace:  11 bytes
 token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlJZNWJ6R3VCTFdNM0I5OU82QkNNZ3NYO...
 
+# 事实上我这里还有一个一条指令的简化版。。不要打我。。我只是为了让你看的更清晰。。
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard-admin | awk '{print $1}')
+
 # 我们取用最后一个token，你的屏幕上可能会有一些空格，那些是不要的，这个token记得保存下来，是永久有效的，可看截图
 ```
 
