@@ -23,3 +23,5 @@
     + [PersistentVolumes](study-notes/kubernetes/PersistentVolumes.md)
   
   - [搭建kubernetes](study-notes/kubernetes/搭建kubernetes.md)
+  
+  - [合集](study-notes/collect/index.md)
